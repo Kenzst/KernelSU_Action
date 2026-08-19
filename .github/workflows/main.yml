@@ -1,0 +1,25 @@
+name: Build Kernel
+on:
+  workflow_dispatch:
+    inputs:
+      config:
+        description: 'Config file to build'
+        required: true
+        default: 'config.env'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build Kernel
+      run: |
+        chmod +x ./scripts/build.sh
+        ./scripts/build.sh ${{ github.event.inputs.config }}
+    
+    - name: Upload AnyKernel3
+      uses: actions/upload-artifact@v4
+      with:
+        name: AnyKernel3
+        path: out/AnyKernel3.zip
